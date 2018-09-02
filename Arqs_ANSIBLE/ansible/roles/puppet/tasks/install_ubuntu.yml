@@ -1,0 +1,7 @@
+ - name: Instalar repositorio PUPPET - Ubuntu
+   apt: deb=/tmp/puppet5-release-xenial.deb 
+   when: ansible_os_family == "Debian"
+
+ - name: Instalar o Puppet Agent - Debian
+   apt: name=puppet-agent state=present update_cache=yes
+   when: ansible_os_family == "Debian"

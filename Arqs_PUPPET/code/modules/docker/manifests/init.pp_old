@@ -1,0 +1,68 @@
+class docker{
+	
+	case $::osfamily{
+		"redhat":{
+			$pacotes = ["yum-utils", "yum-config-manager", "device-mapper-persistent-data","lvm2"]
+			$repositorio = "/bin/yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+		}
+
+		package{$pacotes:
+			ensure => present
+
+		}
+
+		exec{"Adicionando_repositorios":
+			command => $repositorio
+
+		}
+
+		package{'docker-ce':
+			ensure => present
+		}
+
+		service{'docker':
+			ensure => running
+			enable => true,
+			require => Package['docker-ce'
+		 }
+
+		
+		
+		"debian":{
+			exec{"atualizar_pacotes":
+				command => "/usr/bin/apt update"
+			
+			}
+			$pacotes = ["apt-transport-https", "ca-certificates", "curl", "software-properties-common"]
+		
+			exec{"comando_curl":
+				command => "/usr/bin/curl -fsSL https://download.docker.com/linux/ubuntu/gpg | /usr/bin/apt-key add -"
+			
+			}
+			
+			exec{"comando_add_apt_repository":
+				command => "/usr/bin/add-apt-repository 'deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable'"
+				
+			}
+
+			exec{"comando_atualizar_pacotes2":
+				command => "/usr/bin/apt update"
+
+			}
+
+			exec{"comando_instalar_docker":
+				command => "/usr/bin/apt-get install docker-ce"
+
+			}
+
+		}
+
+
+	}
+
+	package{$pacotes:
+		ensure => present
+
+	}
+
+}

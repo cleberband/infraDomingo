@@ -1,0 +1,7 @@
+ - name: Instalando o HTTPD - RedHat
+   yum: name=httpd state=present
+   when: ansible_os_family == "RedHat"
+
+ - name: Iniciando o HTTPD - RedHat
+   service: name=httpd state=restarted
+   when: ansible_os_family == "RedHat"

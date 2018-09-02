@@ -1,0 +1,9 @@
+---
+# tasks file for marvin
+- name: Role para instalar o Puppet
+  hosts: all
+  tasks:
+  - include: prerequisitos.yml
+  - include: install_ubuntu.yml
+  - include: install_centos.yml
+

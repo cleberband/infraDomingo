@@ -1,0 +1,9 @@
+ - name: Criando page no Apache
+   template:
+    src: ../templates/index.html
+    dest: /var/www/html/index.html
+
+ - name: Baixar uma imagem
+   get_url:
+    url: https://tremdos7.files.wordpress.com/2012/04/marvin.jpg 
+    dest: /var/www/html/imagem.jpg

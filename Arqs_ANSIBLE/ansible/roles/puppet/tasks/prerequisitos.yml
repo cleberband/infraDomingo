@@ -1,0 +1,11 @@
+ - name: Pre Requisitos CENTOS - Baixar RPM puppet
+   get_url:
+    url: https://yum.puppet.com/puppet5/puppet5-release-el-7.noarch.rpm
+    dest: /tmp
+   when: ansible_os_family == "RedHat"
+
+ - name: Pre Requisitos Ubuntu - Baixar DEB puppet
+   get_url:
+    url: https://apt.puppetlabs.com/puppet5-release-xenial.deb
+    dest: /tmp
+   when: ansible_os_family == "Debian"

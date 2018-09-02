@@ -1,0 +1,65 @@
+---
+- name: Desafio aula Ansible
+  hosts: all 
+  tasks: 
+
+  - name: Parando o serviço NGINX
+    service:
+     name: nginx
+     state: stopped
+    ignore_errors: yes
+
+  - name: Removendo o NGINX - UBUNTU
+    apt: name=nginx-common state=absent update_cache=yes
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Removendo o NGINX - CENTOS
+    yum: name=nginx state=absent update_cache=yes
+    ignore_errors: yes
+    when: ansible_distribution == "CentOS"
+
+  - name: Instalando pacotes - UBUNTU
+    apt:
+     name: "{{ item }}"
+     state: present
+     update_cache: yes
+    with_items:
+    - "apache2"
+    - "libapache2-mod-php7.0"
+    - "php7.0"
+    notify: restart_apache
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Instalando pacotes - CENTOS
+    yum:
+     name: "{{ item }}"
+     state: present
+    with_items:
+    - "httpd"
+    - "php"
+    notify: restart_httpd
+    when: ansible_distribution == "CentOS"
+
+  - name: Habilitar modulo php7.0 no UBUNTU
+    command: a2enmod php7.0
+    when: ansible_distribution == "Ubuntu"
+
+
+  - name: Movendo arquivo PHP
+    copy:
+      src: index.php
+      dest: /var/www/html/
+
+
+
+  handlers:
+  - name: restart_apache
+    service:
+     name: apache2
+     state: restarted
+
+  - name: restart_httpd
+    service:
+     name: httpd
+     state: restarted
+
